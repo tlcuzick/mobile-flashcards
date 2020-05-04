@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, View } from 'react-native';
 import { connect } from 'react-redux'
+import Constants from 'expo-constants';
 import DeckCard from './DeckCard';
 import {handleReceiveDecks} from '../../actions/decks'
 
@@ -27,8 +28,10 @@ class DeckList extends Component {
             )
         })  
         return (
-            <View>
+            <View style={styles.container}>
+            <ScrollView>
                 {deckListJSX}           
+            </ScrollView>
             </View>
         );
     }
@@ -39,3 +42,15 @@ const mapStateToProps = decks => {
 };
   
 export default connect(mapStateToProps)(DeckList);
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'space-around',
+        alignSelf: 'center',        
+        width: '80%',
+        marginTop: Constants.statusBarHeight,    
+        textAlign: 'center'    
+    }
+  });

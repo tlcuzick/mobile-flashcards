@@ -3,12 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 
 class DeckCard extends Component {
     render() {
-        const {deckID, deckName, numCards} = this.props;
-        const routeParams = {deckID, deckName, numCards}
+        const { deckName, numCards} = this.props;
         return (
-            <View>
-                <Text>{deckName}</Text>
-                <Text>{numCards}</Text>                
+            <View style={styles.deckCard}>
+                <Text style={styles.deckCardHeader}>{deckName}</Text>
+                <Text style={styles.deckCardCount}>{numCards}</Text>                
             </View>
         );
     }
@@ -19,10 +18,20 @@ export default DeckCard;
 
 const styles = StyleSheet.create({
     deckCard: {
-        flex: 1,
+        justifyContent: 'center',
+        height: 75,
         borderBottomWidth: '1px',
         borderBottomStyle: 'solid',
         borderBottomWidth: '1px'
-    }
+    },
+    deckCardHeader: {
+        fontSize: '20px',
+        fontWeight: 'bold',
+        marginBottom: '10px'
+    },
+    deckCardCount: {
+        fontSize: '15px',
+        color: 'gray'
+    }    
 })
 

@@ -14,11 +14,12 @@ import Deck from './screens/Deck/Deck';
 import Quiz from './screens/Quiz/Quiz';
 import NewDeck from './screens/NewDeck/NewDeck';
 import AddCard from './screens/AddCard/AddCard';
+import {setLocalNotification} from './utils/helpers';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const DecksStackScreen = (props) => (
+const DecksStackScreen = () => (
   <Stack.Navigator initialRouteName="DECKS">
     <Stack.Screen name="DECKS" component={DeckList} />    
     <Stack.Screen 
@@ -32,15 +33,11 @@ const DecksStackScreen = (props) => (
 )
 
 export default class App extends React.Component {
+  componentDidMount() {
+    setLocalNotification();
+  }
+
   render() {
-    const customStatusBar = (
-      <View style={{ backgroundColor: 'purple', height: Constants.statusBarHeight }}>
-        <StatusBar translucent backgroundColor='purple' barStyle='light-content' />
-      </View>      
-    );
-
-    //console.log(this.props.state);
-
     return (      
       <Provider store={createStore(decksReducer, middleware)}>
         <NavigationContainer>

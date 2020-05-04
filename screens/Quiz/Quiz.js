@@ -1,12 +1,20 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import {connect} from 'react-redux';
+import {clearLocalNotification, setLocalNotification} from '../../utils/helpers';
 
 class Quiz extends Component {
     state = {
         numAnswered: 0,
         numCorrect: 0,
         showAnswer: false
+    }
+
+    clearNotifications = () => {
+        if(this.state.numAnswered > 0 && this.state.numAnswered === this.props.questions.length) {
+            clearLocalNotification()
+            .then(setLocalNotification)
+        }     
     }
 
     onCorrectAnswer = () => {
@@ -16,7 +24,7 @@ class Quiz extends Component {
               numCorrect: currentState.numCorrect + 1,
               showAnswer: false
             }
-      })
+      }, () => {this.clearNotifications()})
     }
 
     onIncorrectAnswer = () => {
@@ -25,7 +33,7 @@ class Quiz extends Component {
                 numAnswered: currentState.numAnswered + 1,
                 showAnswer: false
               }
-        })
+        }, () => {this.clearNotifications()})
       }
 
       toggleAnswerDisplay = () => {
@@ -36,9 +44,18 @@ class Quiz extends Component {
         })
       }
 
+      restartQuiz = () => {
+          this.setState({
+            numAnswered: 0,
+            numCorrect: 0,
+            showAnswer: false              
+          })
+      }
+
     render() {
         const {numAnswered, numCorrect, showAnswer} = this.state;
-        const {questions} = this.props;
+        const {questions, navigation, route} = this.props;
+        const {deckID} = route.params;
         const numQuestions = questions.length;
         const currentQuestion = numAnswered >= numQuestions ? questions[numQuestions - 1] : questions[numAnswered];
         const questionJSX = showAnswer ? (
@@ -63,9 +80,18 @@ class Quiz extends Component {
         
         if(numAnswered >= numQuestions) {
             return (
-                <View>
-                  <Text>{`${numCorrect}/${numAnswered} correct`}</Text>
-                  <Text>Quiz complete!</Text>
+                <View style={styles.Quiz}>
+                    <Text>{`You answered ${numCorrect} out of ${numAnswered} questions correctly.`}</Text>
+                    <TouchableOpacity
+                        onPress={this.restartQuiz}
+                    >
+                        <Text>Restart Quiz</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {navigation.navigate('Deck', {deckID})}}
+                    >
+                        <Text>Back to Deck</Text>
+                    </TouchableOpacity>                           
                 </View>
             )
         }
