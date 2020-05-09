@@ -21,28 +21,43 @@ class AddCard extends Component {
 
     handleSubmit = async () => {
       const {question, answer} = this.state;
-      const {deckID} = this.props.route.params;
-      const card = {id: uuid(), question, answer}
-      await this.props.dispatch(handleAddCard(deckID, card))
-      this.setState({question: '', answer: ''});
+      if(question.length > 0 && answer.length > 0) {
+        const {deckID} = this.props.route.params;
+        const card = {id: uuid(), question, answer}
+        await this.props.dispatch(handleAddCard(deckID, card))
+        this.setState({question: '', answer: ''}, () => {
+            this.props.navigation.navigate('Deck', {deckID});
+        });
+      }
     }
 
     render() {
         return (
-            <View>
-                <TextInput 
+            <View style={styles.addCard}>
+                <View style={styles.addCardBuffer}></View>
+                <View style={styles.addCardInputContainer}>
+                <TextInput
+                  placeholder='Enter question'
+                  style={styles.addCardTextInput}
                   onChangeText={this.handleQuestionChange}
                   value={this.state.question}
                 />
-                <TextInput 
+                <TextInput
+                  placeholder='Enter answer'
+                  style={styles.addCardTextInput}                
                   onChangeText={this.handleAnswerChange}
                   value={this.state.answer}
-                />                
+                />
+                </View>
+                <View style={styles.addCardButtonContainer}>     
                 <TouchableOpacity
                     onPress={this.handleSubmit}
                 >
-                    <Text>Submit</Text>
-                </TouchableOpacity>            
+                    <View style={styles.addCardButton}>
+                    <Text style={styles.addCardButtonText}>Submit</Text>
+                    </View>
+                </TouchableOpacity>
+                </View>           
             </View>
         );
     }
@@ -51,11 +66,44 @@ class AddCard extends Component {
 export default connect()(AddCard);
 
 const styles = StyleSheet.create({
-    AddCard: {
+    addCard: {
         flex: 1,
-        borderBottomWidth: '1px',
-        borderBottomStyle: 'solid',
-        borderBottomWidth: '1px'
-    }
+        justifyContent: 'space-between'
+    },
+    addCardBuffer: {
+        flex: 1
+    },
+    addCardInputContainer: {
+        flex: 3,
+        justifyContent: 'space-around'
+    },
+    addCardTextInput: {
+        width: '80%',
+        height: 40,
+        alignSelf: 'center',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: '4%'
+    },
+    addCardButtonContainer: {
+        flex: 2,
+        justifyContent: 'center'
+    },
+    addCardButton: {
+        justifyContent: 'center',
+        backgroundColor: 'black',
+        width: '40%',
+        height: 60,
+        alignSelf: 'center',
+        borderRadius: '4%'
+    },
+    addCardButtonText: {
+        color: 'white',
+        backgroundColor: 'black',
+        textAlign: 'center',
+        fontSize: '20px',
+        fontWeight: 'bold'
+    }    
 })
 

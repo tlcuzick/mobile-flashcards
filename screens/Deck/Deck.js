@@ -1,45 +1,113 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import {connect} from 'react-redux';
 
 class Deck extends Component {
     render() {
-        const {route, navigation} = this.props;
-        const {deckID, deckName, numCards} = route.params
+        const {route, navigation, numCards} = this.props;
+        const {deckID, deckName} = route.params
         const params = {deckID}
         return (
             <View style={styles.deck}>
-                <Text>{deckName}</Text>
-                <Text>{numCards}</Text>
+                <View style={styles.deckLargeBuffer}>              
+                </View>   
+                <View style={styles.deckHeader}>
+                  <Text style={styles.deckHeaderText}>{deckName}</Text>
+                  <Text style={styles.deckHeaderCardCount}>{numCards}</Text>                  
+                </View>
+                <View style={styles.deckLargeBuffer}>              
+                </View>                
+                <View style={styles.deckButtons}>
                 <TouchableOpacity
-                    style={styles.buttonAddCard}
                     onPress={() => {navigation.navigate('Add Card', params)}}
                 >
-                    <Text>Add Card</Text>
+                    <View style={styles.deckButtonAddCard}>
+                      <Text style={styles.deckButtonAddCardText}>Add Card</Text>
+                    </View>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={styles.buttonStartQuiz}
                     onPress={() => {navigation.navigate('Quiz', params)}}                    
                 >
-                    <Text>Start Quiz</Text>
-                </TouchableOpacity>                                              
+                    <View style={styles.deckButtonStartQuiz}>
+                      <Text style={styles.deckButtonStartQuizText}>Start Quiz</Text>
+                    </View>
+                </TouchableOpacity>
+                </View>
+                <View style={styles.deckSmallBuffer}>              
+                </View>                                                  
             </View>
         );
     }
 }
 
-export default Deck;
+const mapStateToProps = (state, props) => {
+    const {deckID} = props.route.params;
+    const deck = state[deckID];
+    const numCards = deck.cards ? Object.keys(deck.cards).length : 0;
+    return {numCards}
+}
+
+export default connect(mapStateToProps)(Deck);
 
 const styles = StyleSheet.create({
     deck: {
         flex: 1,
-        borderBottomWidth: '1px',
-        borderBottomStyle: 'solid',
-        borderBottomWidth: '1px'
+        justifyContent: 'center'
     },
-    buttonAddCard: {
-        color: 'black'
+    deckLargeBuffer: {
+        flex: 2
     },
-    buttonStartQuiz: {
-        color: 'white'
-    }
+    deckSmallBuffer: {
+        flex: 1
+    },    
+    deckHeader: {
+        flex: 2,
+        justifyContent: 'space-between'
+    },
+    deckHeaderText: {
+        textAlign: 'center',
+        fontSize: '30px',
+        fontWeight: 'bold',
+        marginBottom: '10px'
+    },
+    deckHeaderCardCount: {
+        textAlign: 'center',
+        fontSize: '20px',
+        color: 'gray'
+    },
+    deckButtons: {
+        flex: 3,
+        justifyContent: 'space-between'
+    },
+    deckButtonStartQuiz: {
+        justifyContent: 'center',
+        backgroundColor: 'black',
+        width: '40%',
+        height: 60,
+        alignSelf: 'center',
+        borderRadius: '4%'
+    },
+    deckButtonStartQuizText: {
+        color: 'white',
+        backgroundColor: 'black',
+        textAlign: 'center',
+        fontSize: '20px',
+        fontWeight: 'bold'
+    },
+    deckButtonAddCard: {
+        justifyContent: 'center',
+        width: '40%',
+        height: 60,
+        alignSelf: 'center',
+        borderStyle: 'solid',
+        borderWidth: '2px',
+        borderColor: 'black',
+        borderRadius: '4%'
+    },
+    deckButtonAddCardText: {
+        color: 'black',
+        textAlign: 'center',
+        fontSize: '20px',
+        fontWeight: 'bold'
+    }     
 })

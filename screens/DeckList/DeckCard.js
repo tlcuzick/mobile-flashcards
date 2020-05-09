@@ -27,11 +27,13 @@ const styles = StyleSheet.create({
     deckCardHeader: {
         fontSize: '20px',
         fontWeight: 'bold',
-        marginBottom: '10px'
+        marginBottom: '10px',
+        textAlign: 'center'
     },
     deckCardCount: {
         fontSize: '15px',
-        color: 'gray'
+        color: 'gray',
+        textAlign: 'center'
     }    
 })
 

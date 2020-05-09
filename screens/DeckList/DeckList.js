@@ -28,7 +28,7 @@ class DeckList extends Component {
             )
         })  
         return (
-            <View style={styles.container}>
+            <View style={styles.deckListContainer}>
             <ScrollView>
                 {deckListJSX}           
             </ScrollView>
@@ -45,12 +45,11 @@ export default connect(mapStateToProps)(DeckList);
 
 
 const styles = StyleSheet.create({
-    container: {
+    deckListContainer: {
         flex: 1,
         justifyContent: 'space-around',
         alignSelf: 'center',        
         width: '80%',
-        marginTop: Constants.statusBarHeight,    
-        textAlign: 'center'    
+        marginTop: Constants.statusBarHeight
     }
   });

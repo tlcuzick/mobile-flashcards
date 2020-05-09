@@ -14,24 +14,38 @@ class NewDeck extends Component {
       this.setState({deckTitle})
     }
 
-    handleSubmit = async () => {      
-      await this.props.dispatch(handleAddDeck(this.state.deckTitle, uuid()));
-      this.setState({deckTitle: ''});
+    handleSubmit = async () => { 
+      if(this.state.deckTitle.length > 0) {
+        await this.props.dispatch(handleAddDeck(this.state.deckTitle, uuid()));
+        this.setState({deckTitle: ''}, () => {
+            this.props.navigation.navigate('DECKS');
+        });
+      }
     }
 
     render() {
         return (
-            <View>
-                <Text>What is the title of your new deck?</Text>
-                <TextInput 
+            <View style={styles.newDeck}>
+
+                <View style={styles.newDeckHeader}>
+                <Text style={styles.newDeckHeaderText}>What is the title of your new deck?</Text>
+                </View>
+                <View style={styles.newDeckTextInputContainer}>
+                <TextInput
+                  style={styles.newDeckTextInput}
                   onChangeText={this.handleChange}
                   value={this.state.deckTitle}
                 />
+                </View>
+                <View style={styles.newDeckButtonContainer}>
                 <TouchableOpacity
                     onPress={this.handleSubmit}
                 >
-                    <Text>Submit</Text>
-                </TouchableOpacity>            
+                    <View style={styles.newDeckButton}>
+                    <Text style={styles.newDeckButtonText}>Submit</Text>
+                    </View>
+                </TouchableOpacity>
+                </View>         
             </View>
         );
     }
@@ -40,11 +54,50 @@ class NewDeck extends Component {
 export default connect()(NewDeck);
 
 const styles = StyleSheet.create({
-    NewDeck: {
+    newDeck: {
         flex: 1,
-        borderBottomWidth: '1px',
-        borderBottomStyle: 'solid',
-        borderBottomWidth: '1px'
-    }
+        justifyContent: 'space-between'
+    },
+    newDeckHeader: {
+        flex: 2,
+        justifyContent: 'center'
+    },
+    newDeckHeaderText: {
+        textAlign: 'center',
+        fontSize: '30px',
+        fontWeight: 'bold'
+    },
+    newDeckTextInputContainer: {
+        flex: 2,
+        justifyContent: 'center'
+    },
+    newDeckTextInput: {
+        width: '80%',
+        height: 40,
+        alignSelf: 'center',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: '4%'
+    },
+    newDeckButtonContainer: {
+        flex: 2,
+        justifyContent: 'center'
+    },
+    newDeckButton: {
+        justifyContent: 'center',
+        backgroundColor: 'black',
+        width: '40%',
+        height: 60,
+        alignSelf: 'center',
+        borderRadius: '4%'
+    },
+    newDeckButtonText: {
+        color: 'white',
+        backgroundColor: 'black',
+        textAlign: 'center',
+        fontSize: '20px',
+        fontWeight: 'bold'
+    } 
 })
 

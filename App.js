@@ -25,7 +25,7 @@ const DecksStackScreen = () => (
     <Stack.Screen 
       name="Deck" 
       component={Deck}
-      options={({ route }) => ({ title: route.params.deckName })} 
+      options={({ route }) => ({title: route.params.deckName })} 
     />
     <Stack.Screen name="Quiz" component={Quiz} />
     <Stack.Screen name="Add Card" component={AddCard} />     
