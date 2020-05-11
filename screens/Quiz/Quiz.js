@@ -13,42 +13,32 @@ class Quiz extends Component {
     showAnswer: false,
   };
 
-  clearNotifications = () => {
+  componentDidUpdate(prevProps) {
     if (
       this.state.numAnswered > 0 &&
-      this.state.numAnswered === this.props.questions.length
+      this.state.numAnswered === prevProps.questions.length
     ) {
       clearLocalNotification().then(setLocalNotification);
     }
-  };
+  }
 
-  onCorrectAnswer = () => {
-    this.setState(
-      (currentState) => {
-        return {
-          numAnswered: currentState.numAnswered + 1,
-          numCorrect: currentState.numCorrect + 1,
-          showAnswer: false,
-        };
-      },
-      () => {
-        this.clearNotifications();
-      }
-    );
+ onCorrectAnswer = () => {
+    this.setState((currentState) => {
+      return {
+        numAnswered: currentState.numAnswered + 1,
+        numCorrect: currentState.numCorrect + 1,
+        showAnswer: false,
+      };
+    });
   };
 
   onIncorrectAnswer = () => {
-    this.setState(
-      (currentState) => {
-        return {
-          numAnswered: currentState.numAnswered + 1,
-          showAnswer: false,
-        };
-      },
-      () => {
-        this.clearNotifications();
-      }
-    );
+    this.setState((currentState) => {
+      return {
+        numAnswered: currentState.numAnswered + 1,
+        showAnswer: false,
+      };
+    });
   };
 
   toggleAnswerDisplay = () => {
@@ -115,24 +105,26 @@ class Quiz extends Component {
             <Text style={styles.quizScoreText}>{message}</Text>
           </View>
           <View style={styles.quizBufferSmall}></View>
-          <View style={styles.quizButtons}>
-            <TouchableOpacity onPress={this.restartQuiz}>
-              <View style={[styles.quizButton, styles.quizButtonBorder]}>
-                <Text style={styles.quizButtonText}>Restart Quiz</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("Deck", { deckID });
-              }}
-            >
-              <View style={[styles.quizButton, { backgroundColor: "black" }]}>
-                <Text style={[styles.quizButtonText, { color: "white" }]}>
-                  Back To Deck
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+          {numQuestions > 0 && (
+            <View style={styles.quizButtons}>
+              <TouchableOpacity onPress={this.restartQuiz}>
+                <View style={[styles.quizButton, styles.quizButtonBorder]}>
+                  <Text style={styles.quizButtonText}>Restart Quiz</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("Deck", { deckID });
+                }}
+              >
+                <View style={[styles.quizButton, { backgroundColor: "black" }]}>
+                  <Text style={[styles.quizButtonText, { color: "white" }]}>
+                    Back To Deck
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
           <View style={styles.quizBufferSmall}></View>
         </View>
       );
@@ -143,7 +135,7 @@ class Quiz extends Component {
         <View style={styles.quizProgress}>
           <Text
             style={styles.quizProgressText}
-          >{`${numCorrect}/${numAnswered}`}</Text>
+          >{`${numCorrect}/${numQuestions}`}</Text>
         </View>
         <View style={styles.quizBufferLarge}></View>
         {questionJSX}
