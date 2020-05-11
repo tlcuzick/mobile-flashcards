@@ -13,9 +13,9 @@ class Quiz extends Component {
     showAnswer: false,
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (
-      this.state.numAnswered > 0 &&
+      this.state.numAnswered > prevState.numAnswered &&
       this.state.numAnswered === prevProps.questions.length
     ) {
       clearLocalNotification().then(setLocalNotification);
